@@ -101,13 +101,12 @@ const Context = ({ children }) => {
       } else {
         setCurrentUser(null);
         setUserData(null);
-        navigate("/signin");
       }
     });
-  
+
     return () => unsubscribe();
-  }, [navigate]); 
-  
+  }, [navigate]);
+
   const initialState = {
     createUserWithEmailAndPassword: createUserWithEmailAndPassword,
     signInWithGoogle: signInWithGoogle,

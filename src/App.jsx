@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import Signup from "./pages/auth/Signup";
-import Sidebar from "./components/navbar/Sidebar";
 import Signin from "./pages/auth/Signin";
+import Navbar from "./components/navbar/Navbar";
 
 function App() {
   return (
     <div>
-      <Sidebar />
+      <Navbar />
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
