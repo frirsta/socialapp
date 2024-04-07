@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import { ref, getDownloadURL } from "firebase/storage";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { db, storage, onAuthStateChanged } from "../firebase/firebase";
+import { db, storage, onAuthStateChanged, auth } from "../firebase/firebase";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -88,29 +88,26 @@ const Context = ({ children }) => {
     await signOut(auth);
   };
 
-  const onAuthStateChanged = async () => {
-    onAuthStateChanged(auth, async (user) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const q = query(collectionUserRef, where("uid", "==", user?.uid));
-        await onSnapshot(q, (doc) => {
-          setUserData(doc?.docs[0]?.data());
-        });
+        const q = query(collectionUserRef, where("uid", "==", user.uid));
+        const docSnapshots = await getDocs(q);
+        if (!docSnapshots.empty) {
+          setUserData(docSnapshots.docs[0].data());
+        }
         setCurrentUser(user);
+        navigate("/");
       } else {
         setCurrentUser(null);
         setUserData(null);
-        navigate("/");
+        navigate("/signin");
       }
     });
-  };
-  useEffect(() => {
-    onAuthStateChanged();
-    if (currentUser || userData) {
-      navigate("/");
-    } else {
-      navigate("/signin");
-    }
-  }, []);
+  
+    return () => unsubscribe();
+  }, [navigate]); 
+  
   const initialState = {
     createUserWithEmailAndPassword: createUserWithEmailAndPassword,
     signInWithGoogle: signInWithGoogle,
