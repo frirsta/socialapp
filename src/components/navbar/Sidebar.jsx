@@ -1,5 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
+import { AuthContext } from "../../context/AuthContext";
+import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
+import MenuIcon from "@mui/icons-material/Menu";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import ExitToAppOutlined from "@mui/icons-material/ExitToAppOutlined";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -8,20 +18,12 @@ import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import HomeSharpIcon from "@mui/icons-material/HomeSharp";
-import SearchSharpIcon from "@mui/icons-material/SearchSharp";
-import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import Avatar from "@mui/material/Avatar";
-import MenuSharpIcon from "@mui/icons-material/MenuSharp";
-import AddBoxSharpIcon from "@mui/icons-material/AddBoxSharp";
-import { Link } from "react-router-dom";
+
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -50,7 +52,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
 
@@ -92,6 +93,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Sidebar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const { signOutUser } = useContext(AuthContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -169,15 +171,15 @@ export default function Sidebar() {
                     }}
                   >
                     {index % 5 === 0 ? (
-                      <HomeSharpIcon />
+                      <HomeRoundedIcon />
                     ) : index % 4 === 0 ? (
                       <Avatar sx={{ width: 24, height: 24 }} />
                     ) : index % 3 === 0 ? (
-                      <AddBoxSharpIcon />
+                      <AddBoxOutlinedIcon />
                     ) : index % 2 === 0 ? (
-                      <SearchSharpIcon />
+                      <SearchOutlinedIcon />
                     ) : (
-                      <FavoriteSharpIcon />
+                      <FavoriteBorderOutlinedIcon />
                     )}
                   </ListItemIcon>
                   <ListItemText
@@ -189,27 +191,24 @@ export default function Sidebar() {
             ))}
           </List>
           <List>
-            <Divider />
-            <ListItem disablePadding sx={{ display: "block" }}>
-              <ListItemButton
+            <ListItemButton
+              onClick={signOutUser}
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <MenuSharpIcon />
-                </ListItemIcon>
-                <ListItemText primary="More" sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
+                <ExitToAppOutlined />
+              </ListItemIcon>
+            </ListItemButton>
           </List>
         </Box>
       </Drawer>

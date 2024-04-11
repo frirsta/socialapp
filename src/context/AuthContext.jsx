@@ -1,9 +1,14 @@
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
-import { createContext, useEffect, useState } from "react";
-import { ref, getDownloadURL } from "firebase/storage";
-import React from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db, storage, onAuthStateChanged, auth } from "../firebase/firebase";
+import {
+  addDoc,
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -12,23 +17,21 @@ import {
   sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
+import { db, storage, onAuthStateChanged, auth } from "../firebase/firebase";
 
 export const AuthContext = createContext();
+
 const Context = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [userData, setUserData] = useState();
-  const navigate = useNavigate();
-  const collectionUserRef = collection(db, "users");
   const provider = new GoogleAuthProvider();
+  const collectionUserRef = collection(db, "users");
+  const navigate = useNavigate();
 
-  const createUserWithEmailAndPassword = async (email, password, username) => {
+  const signupUserWithEmailAndPassword = async (username, email, password) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const user = res.user;
       const defaultProfileRef = ref(storage, "default/default_profile.png");
       const defaultProfilePicUrl = await getDownloadURL(defaultProfileRef);
 
@@ -39,6 +42,7 @@ const Context = ({ children }) => {
         providerId: "email/password",
         profilePicture: defaultProfilePicUrl,
       });
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -47,7 +51,7 @@ const Context = ({ children }) => {
   const signInWithGoogle = async () => {
     try {
       const popup = await signInWithPopup(auth, provider);
-      const user = popup.user;
+      const user = popup?.user;
       const q = query(collectionUserRef, where("uid", "==", user?.uid));
       const docs = await getDocs(q);
       if (docs.empty) {
@@ -68,7 +72,7 @@ const Context = ({ children }) => {
     }
   };
 
-  const signInWithEmailAndPassword = async (email, password) => {
+  const loginWithEmailAndPassword = async (email, password) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -76,7 +80,7 @@ const Context = ({ children }) => {
     }
   };
 
-  const sendPasswordResetEmail = async (email) => {
+  const resetPassword = async (email) => {
     try {
       await sendPasswordResetEmail(auth, email);
     } catch (error) {
@@ -84,35 +88,43 @@ const Context = ({ children }) => {
     }
   };
 
-  const signOut = async () => {
+  const signOutUser = async () => {
     await signOut(auth);
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+  const userStateChange = async () => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const q = query(collectionUserRef, where("uid", "==", user.uid));
-        const docSnapshots = await getDocs(q);
-        if (!docSnapshots.empty) {
-          setUserData(docSnapshots.docs[0].data());
-        }
+        const q = query(collectionUserRef, where("uid", "==", user?.uid));
+        onSnapshot(q, (doc) => {
+          setUserData(doc?.docs[0]?.data());
+        });
         setCurrentUser(user);
-        navigate("/");
       } else {
         setCurrentUser(null);
-        setUserData(null);
       }
     });
+  };
 
-    return () => unsubscribe();
-  }, [navigate]);
+  useEffect(() => {
+    userStateChange();
+    if (currentUser || userData) {
+      console.log("User is logged in", currentUser, userData);
+      navigate("/");
+    } else {
+      console.log("User is not logged in", currentUser, userData);
+    }
+    return () => {
+      userStateChange();
+    };
+  }, []);
 
   const initialState = {
-    createUserWithEmailAndPassword: createUserWithEmailAndPassword,
+    signupUserWithEmailAndPassword: signupUserWithEmailAndPassword,
     signInWithGoogle: signInWithGoogle,
-    signInWithEmailAndPassword: signInWithEmailAndPassword,
-    sendPasswordResetEmail: sendPasswordResetEmail,
-    signOut: signOut,
+    loginWithEmailAndPassword: loginWithEmailAndPassword,
+    resetPassword: resetPassword,
+    signOutUser: signOutUser,
     currentUser: currentUser,
     userData: userData,
   };
