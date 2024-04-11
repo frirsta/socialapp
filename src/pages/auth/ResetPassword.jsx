@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { AuthContext } from "../../context/AuthContext";
 import FormControl from "@mui/material/FormControl";
@@ -17,11 +18,14 @@ const ResetPassword = () => {
   const [sent, setSent] = useState(false);
   const initialValues = { email: "" };
   const { resetPassword, error } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email format").required("Required"),
   });
-
+  const goBack = async (event) => {
+    event.preventDefault();
+    await navigate(-1);
+  };
   const handleReset = async (event) => {
     event.preventDefault();
     const { email } = formik.values;
@@ -103,6 +107,7 @@ const ResetPassword = () => {
             </Box>
           </Paper>
         )}
+        <Button onClick={goBack}>Go back</Button>
       </Box>
     </Grid>
   );

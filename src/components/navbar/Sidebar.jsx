@@ -93,7 +93,7 @@ const Drawer = styled(MuiDrawer, {
 export default function Sidebar() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const { signOutUser } = useContext(AuthContext);
+  const { signOutUser, userData, currentUser } = useContext(AuthContext);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -102,116 +102,121 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  console.log(userData);
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            height: "100%",
-          }}
-        >
-          <List>
-            {[
-              { primary: "Home", link: "/" },
-              { primary: "Notifications", link: "/notifications" },
-              { primary: "Explore", link: "/explore" },
-              { primary: "Create", link: "/create" },
-              { primary: "Profile", link: "/profile" },
-            ].map((item, index) => (
-              <ListItem
-                key={item.primary}
-                disablePadding
-                sx={{ display: "block" }}
-              >
-                <ListItemButton
-                  LinkComponent={Link}
-                  to={item.link}
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {index % 5 === 0 ? (
-                      <HomeRoundedIcon />
-                    ) : index % 4 === 0 ? (
-                      <Avatar sx={{ width: 24, height: 24 }} />
-                    ) : index % 3 === 0 ? (
-                      <AddBoxOutlinedIcon />
-                    ) : index % 2 === 0 ? (
-                      <SearchOutlinedIcon />
-                    ) : (
-                      <FavoriteBorderOutlinedIcon />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.primary}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <List>
-            <ListItemButton
-              onClick={signOutUser}
+    currentUser && (
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar position="fixed" open={open}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
               sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
+                marginRight: 5,
+                ...(open && { display: "none" }),
               }}
             >
-              <ListItemIcon
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "100%",
+            }}
+          >
+            <List>
+              {[
+                { primary: "Home", link: "/" },
+                { primary: "Notifications", link: "/notifications" },
+                { primary: "Explore", link: "/explore" },
+                { primary: "Create", link: "/create" },
+                { primary: "Profile", link: `/profile/${userData?.uid}` },
+              ].map((item, index) => (
+                <ListItem
+                  key={item.primary}
+                  disablePadding
+                  sx={{ display: "block" }}
+                >
+                  <ListItemButton
+                    LinkComponent={Link}
+                    to={item.link}
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {index % 5 === 0 ? (
+                        <HomeRoundedIcon />
+                      ) : index % 4 === 0 ? (
+                        <Avatar
+                          src={userData?.profilePicture}
+                          sx={{ width: 24, height: 24 }}
+                        />
+                      ) : index % 3 === 0 ? (
+                        <AddBoxOutlinedIcon />
+                      ) : index % 2 === 0 ? (
+                        <SearchOutlinedIcon />
+                      ) : (
+                        <FavoriteBorderOutlinedIcon />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={item.primary}
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+            <List>
+              <ListItemButton
+                onClick={signOutUser}
                 sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
                 }}
               >
-                <ExitToAppOutlined />
-              </ListItemIcon>
-            </ListItemButton>
-          </List>
-        </Box>
-      </Drawer>
-    </Box>
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ExitToAppOutlined />
+                </ListItemIcon>
+              </ListItemButton>
+            </List>
+          </Box>
+        </Drawer>
+      </Box>
+    )
   );
 }
