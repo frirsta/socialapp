@@ -17,11 +17,15 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import google from "../../assets/icons/google.png";
+import Alert from "@mui/material/Alert";
 
 const Signup = () => {
+  const [errors, setErrors] = useState(null);
+  const [open, setOpen] = useState(true);
+  const [openFormValidation, setOpenFormValidation] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { signupUserWithEmailAndPassword, signInWithGoogle } =
+  const { signupUserWithEmailAndPassword, signInWithGoogle, error } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -57,12 +61,17 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const { username, email, password } = formik.values;
-    if (formik.isValid === true) {
-      signupUserWithEmailAndPassword(username, email, password);
-      setLoading(true);
-    } else {
-      setLoading(false);
-      alert("Please fill in the form correctly");
+    try {
+      if (formik.isValid === true) {
+        signupUserWithEmailAndPassword(username, email, password);
+        setLoading(true);
+      } else {
+        setLoading(false);
+        setOpenFormValidation(true);
+        setErrors("Invalid form data");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   const formik = useFormik({ initialValues, validationSchema, handleSubmit });
@@ -81,6 +90,26 @@ const Signup = () => {
           elevation={1}
           sx={{ padding: 3, textAlign: "center", maxWidth: "80vw" }}
         >
+          {errors && openFormValidation && (
+            <Alert
+              onClose={() => {
+                setOpenFormValidation(false);
+              }}
+            >
+              {errors}
+            </Alert>
+          )}
+
+          {error && open === true && (
+            <Alert
+              onClose={() => {
+                setOpen(false);
+              }}
+            >
+              {error}
+            </Alert>
+          )}
+
           <Typography variant="h4">Sign up</Typography>
           <Box
             onSubmit={handleSubmit}
@@ -160,6 +189,7 @@ const Signup = () => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
+              onClick={signInWithGoogle}
               sx={{
                 width: "35ch",
                 backgroundColor: "#fff",

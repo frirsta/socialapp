@@ -7,7 +7,7 @@ export const getFirebaseErrorMessage = (code) => {
 
       break;
 
-    case "auth/email-already-exists":
+    case "auth/email-already-in-use":
       message = "Email already exist";
 
       break;
@@ -22,7 +22,7 @@ export const getFirebaseErrorMessage = (code) => {
 
       break;
 
-    case "auth/invalid-password":
+    case "auth/wrong-password":
       message = "Incorrect Password";
 
       break;

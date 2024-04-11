@@ -17,12 +17,13 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import google from "../../assets/icons/google.png";
+import Alert from "@mui/material/Alert";
 
 const Signin = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, userData } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { loginWithEmailAndPassword, signInWithGoogle } =
+  const { loginWithEmailAndPassword, signInWithGoogle, error } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -35,36 +36,41 @@ const Signin = () => {
     setLoading(true);
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // navigate("/");
         setLoading(false);
+        navigate("/");
       } else {
-        // navigate("/signin");
         setLoading(false);
+        navigate("/signin");
       }
     });
-  }, []);
-  console.log(currentUser);
+  }, [navigate]);
+
   const initialValues = {
     email: "",
     password: "",
   };
+
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email format").required("Required"),
     password: Yup.string().required("Required"),
   });
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const { email, password } = formik.values;
     if (formik.isValid === true) {
       loginWithEmailAndPassword(email, password);
       setLoading(true);
+      navigate("/");
     } else {
       setLoading(false);
       alert("Please fill in all fields");
     }
     console.log(formik.values);
   };
+
   const formik = useFormik({ initialValues, validationSchema, handleSubmit });
+
   return (
     <Grid item xs={12} sx={{ height: "100vh" }}>
       <Box
@@ -76,6 +82,12 @@ const Signin = () => {
           alignItems: "center",
         }}
       >
+        {error && (
+          <Alert color="red" className="text-sm z-50">
+            {error}
+          </Alert>
+        )}
+
         <Paper
           elevation={1}
           sx={{ padding: 3, textAlign: "center", maxWidth: "80vw" }}
@@ -144,13 +156,14 @@ const Signin = () => {
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
+              onClick={signInWithGoogle}
               sx={{
                 width: "35ch",
                 backgroundColor: "#fff",
                 color: "#5a7abe",
                 padding: 1,
               }}
-              variant="contained"
+              variant="outlined"
             >
               <img width={24} src={google} alt="google icon" />{" "}
               <Typography sx={{ marginLeft: 1, fontSize: 12 }}>

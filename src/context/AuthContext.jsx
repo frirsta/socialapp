@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   addDoc,
   collection,
@@ -18,14 +17,18 @@ import {
   signOut,
 } from "firebase/auth";
 import { db, storage, onAuthStateChanged, auth } from "../firebase/firebase";
+import { useNavigate } from "react-router-dom";
+import { getFirebaseErrorMessage } from "../components/error/ErrorMessages";
 
 export const AuthContext = createContext();
 
 const Context = ({ children }) => {
+  const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState();
   const [userData, setUserData] = useState();
   const provider = new GoogleAuthProvider();
   const collectionUserRef = collection(db, "users");
+
   const navigate = useNavigate();
 
   const signupUserWithEmailAndPassword = async (username, email, password) => {
@@ -42,9 +45,9 @@ const Context = ({ children }) => {
         providerId: "email/password",
         profilePicture: defaultProfilePicUrl,
       });
-      navigate("/");
     } catch (error) {
-      console.error(error);
+      setError(getFirebaseErrorMessage(error.code));
+      console.log(error);
     }
   };
 
@@ -68,7 +71,8 @@ const Context = ({ children }) => {
         });
       }
     } catch (error) {
-      console.error(error);
+      setError(getFirebaseErrorMessage(error.code));
+      console.log(error.message);
     }
   };
 
@@ -76,7 +80,8 @@ const Context = ({ children }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
-      console.log(error);
+      setError(getFirebaseErrorMessage(error.code));
+      console.log(error.message);
     }
   };
 
@@ -84,39 +89,33 @@ const Context = ({ children }) => {
     try {
       await sendPasswordResetEmail(auth, email);
     } catch (error) {
-      console.error(error);
+      setError(getFirebaseErrorMessage(error.code));
+      console.log(error.message);
     }
   };
 
   const signOutUser = async () => {
     await signOut(auth);
+    setCurrentUser(null);
+    setUserData(null);
+    navigate("/signin");
   };
 
-  const userStateChange = async () => {
-    onAuthStateChanged(auth, async (user) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const q = query(collectionUserRef, where("uid", "==", user?.uid));
+        const q = query(collectionUserRef, where("uid", "==", user.uid));
         onSnapshot(q, (doc) => {
-          setUserData(doc?.docs[0]?.data());
+          setUserData(doc.docs[0]?.data());
         });
         setCurrentUser(user);
       } else {
         setCurrentUser(null);
+        setUserData(null);
       }
     });
-  };
 
-  useEffect(() => {
-    userStateChange();
-    if (currentUser || userData) {
-      console.log("User is logged in", currentUser, userData);
-      navigate("/");
-    } else {
-      console.log("User is not logged in", currentUser, userData);
-    }
-    return () => {
-      userStateChange();
-    };
+    return unsubscribe;
   }, []);
 
   const initialState = {
@@ -127,6 +126,7 @@ const Context = ({ children }) => {
     signOutUser: signOutUser,
     currentUser: currentUser,
     userData: userData,
+    error: error,
   };
 
   return (
