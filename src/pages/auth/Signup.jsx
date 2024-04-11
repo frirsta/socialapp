@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { AuthContext } from "../../context/AuthContext";
 import { onAuthStateChanged, auth } from "../../firebase/firebase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -206,7 +206,14 @@ const Signup = () => {
           </Box>
           <Box sx={{ margin: 2 }}>
             <Typography variant="body1">
-              Already have an account? <a href="/signin">Sign in</a>
+              Already have an account?{" "}
+              <Typography
+                component={Link}
+                to={"/signin"}
+                sx={{ textDecoration: "none", color: "#5a7abe" }}
+              >
+                Sign in
+              </Typography>
             </Typography>
           </Box>
         </Paper>

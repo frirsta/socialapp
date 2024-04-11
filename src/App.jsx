@@ -1,13 +1,17 @@
 import React from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import Context from "./context/AuthContext";
+import Navbar from "./components/navbar/Navbar";
 import Signup from "./pages/auth/Signup";
 import Signin from "./pages/auth/Signin";
-import Navbar from "./components/navbar/Navbar";
+import ResetPassword from "./pages/auth/ResetPassword";
+import ChangePassword from "./pages/auth/ChangePassword";
 import Home from "./pages/base/Home";
 import Settings from "./pages/profile/Settings";
+import Profile from "./pages/profile/Profile";
 import PrivateRoute from "./routes/PrivateRoute";
-import PublicRoute from "./routes/PublicRoute";
+import PublicOnlyRoute from "./routes/PublicOnlyRoute";
+
 function App() {
   return (
     <BrowserRouter>
@@ -25,17 +29,33 @@ function App() {
           <Route
             path="/signup"
             element={
-              <PublicRoute>
+              <PublicOnlyRoute>
                 <Signup />
-              </PublicRoute>
+              </PublicOnlyRoute>
             }
           />
           <Route
             path="/signin"
             element={
-              <PublicRoute>
+              <PublicOnlyRoute>
                 <Signin />
-              </PublicRoute>
+              </PublicOnlyRoute>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <PublicOnlyRoute>
+                <ResetPassword />
+              </PublicOnlyRoute>
+            }
+          />
+          <Route
+            path="/change-password"
+            element={
+              <PrivateRoute>
+                <ChangePassword />
+              </PrivateRoute>
             }
           />
           <Route
@@ -43,6 +63,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Settings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile/:id"
+            element={
+              <PrivateRoute>
+                <Profile />
               </PrivateRoute>
             }
           />

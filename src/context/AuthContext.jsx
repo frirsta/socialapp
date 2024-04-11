@@ -1,4 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { ref, getDownloadURL } from "firebase/storage";
 import {
   addDoc,
   collection,
@@ -7,7 +9,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -15,9 +16,11 @@ import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signOut,
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
 } from "firebase/auth";
 import { db, storage, onAuthStateChanged, auth } from "../firebase/firebase";
-import { useNavigate } from "react-router-dom";
 import { getFirebaseErrorMessage } from "../components/error/ErrorMessages";
 
 export const AuthContext = createContext();
@@ -78,7 +81,7 @@ const Context = ({ children }) => {
 
   const loginWithEmailAndPassword = async (email, password) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       setError(getFirebaseErrorMessage(error.code));
       console.log(error.message);
@@ -101,6 +104,35 @@ const Context = ({ children }) => {
     navigate("/signin");
   };
 
+  const changePassword = async (newPassword) => {
+    if (!currentUser) {
+      setError("No user logged in");
+      return;
+    }
+
+    try {
+      await updatePassword(currentUser, newPassword);
+      console.log("Password updated successfully.");
+    } catch (error) {
+      if (error.code === "auth/requires-recent-login") {
+        setError("Please re-authenticate to change your password.");
+      } else {
+        setError(getFirebaseErrorMessage(error.code));
+      }
+      console.error(error);
+    }
+  };
+
+  const reauthenticate = async (email, currentPassword) => {
+    const credential = EmailAuthProvider.credential(email, currentPassword);
+    try {
+      await reauthenticateWithCredential(currentUser, credential);
+      console.log("Re-authentication successful.");
+    } catch (error) {
+      setError(getFirebaseErrorMessage(error.code));
+      console.error(error);
+    }
+  };
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -124,6 +156,8 @@ const Context = ({ children }) => {
     loginWithEmailAndPassword: loginWithEmailAndPassword,
     resetPassword: resetPassword,
     signOutUser: signOutUser,
+    changePassword: changePassword,
+    reauthenticate: reauthenticate,
     currentUser: currentUser,
     userData: userData,
     error: error,

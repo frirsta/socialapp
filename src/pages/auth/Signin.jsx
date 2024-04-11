@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { onAuthStateChanged, auth } from "../../firebase/firebase";
 import { AuthContext } from "../../context/AuthContext";
 import FormControl from "@mui/material/FormControl";
 import IconButton from "@mui/material/IconButton";
@@ -16,11 +15,10 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import google from "../../assets/icons/google.png";
 import Alert from "@mui/material/Alert";
+import google from "../../assets/icons/google.png";
 
 const Signin = () => {
-  const { currentUser, userData } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { loginWithEmailAndPassword, signInWithGoogle, error } =
@@ -31,19 +29,6 @@ const Signin = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  useEffect(() => {
-    setLoading(true);
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoading(false);
-        navigate("/");
-      } else {
-        setLoading(false);
-        navigate("/signin");
-      }
-    });
-  }, [navigate]);
 
   const initialValues = {
     email: "",
@@ -145,7 +130,15 @@ const Signin = () => {
                 </Typography>
               )}
             </FormControl>
-
+            <Box sx={{ textAlign: "right", m: 1, width: "31ch" }}>
+              <Typography
+                sx={{ textDecoration: "none", color: "#5a7abe" }}
+                component={Link}
+                to={"/reset-password"}
+              >
+                Forgot Password
+              </Typography>
+            </Box>
             <Button
               sx={{ width: "35ch", margin: 2, padding: 1 }}
               variant="contained"
@@ -173,7 +166,14 @@ const Signin = () => {
           </Box>
           <Box sx={{ margin: 2 }}>
             <Typography variant="body1">
-              Don't have an account? <a href="/signup">Sign up</a>
+              Don't have an account?{" "}
+              <Typography
+                component={Link}
+                to={"/signup"}
+                sx={{ textDecoration: "none", color: "#5a7abe" }}
+              >
+                Sign up
+              </Typography>
             </Typography>
           </Box>
         </Paper>
