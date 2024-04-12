@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import { AuthContext } from "../../context/AuthContext";
-import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -23,6 +22,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
+import AddPost from "../posts/AddPost";
 
 const drawerWidth = 240;
 
@@ -143,56 +143,107 @@ export default function Sidebar() {
             }}
           >
             <List>
-              {[
-                { primary: "Home", link: "/" },
-                { primary: "Notifications", link: "/notifications" },
-                { primary: "Explore", link: "/explore" },
-                { primary: "Create", link: "/create" },
-                { primary: "Profile", link: `/profile/${userData?.uid}` },
-              ].map((item, index) => (
-                <ListItem
-                  key={item.primary}
-                  disablePadding
-                  sx={{ display: "block" }}
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  LinkComponent={Link}
+                  to={"/"}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
                 >
-                  <ListItemButton
-                    LinkComponent={Link}
-                    to={item.link}
+                  <ListItemIcon
                     sx={{
-                      minHeight: 48,
-                      justifyContent: open ? "initial" : "center",
-                      px: 2.5,
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
                     }}
                   >
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {index % 5 === 0 ? (
-                        <HomeRoundedIcon />
-                      ) : index % 4 === 0 ? (
-                        <Avatar
-                          src={userData?.profilePicture}
-                          sx={{ width: 24, height: 24 }}
-                        />
-                      ) : index % 3 === 0 ? (
-                        <AddBoxOutlinedIcon />
-                      ) : index % 2 === 0 ? (
-                        <SearchOutlinedIcon />
-                      ) : (
-                        <FavoriteBorderOutlinedIcon />
-                      )}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.primary}
-                      sx={{ opacity: open ? 1 : 0 }}
+                    <HomeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  LinkComponent={Link}
+                  to={"/notifications"}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <FavoriteBorderOutlinedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Notifications"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <AddPost openSidebar={open} />
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  LinkComponent={Link}
+                  to={"/explore"}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <SearchOutlinedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Explore"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <ListItemButton
+                  LinkComponent={Link}
+                  to={`/profile/${userData?.uid}`}
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? "initial" : "center",
+                    px: 2.5,
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : "auto",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Avatar
+                      src={userData?.profilePicture}
+                      sx={{ width: 24, height: 24 }}
                     />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Profile"
+                    sx={{ opacity: open ? 1 : 0 }}
+                  />
+                </ListItemButton>
+              </ListItem>
             </List>
             <List>
               <ListItemButton

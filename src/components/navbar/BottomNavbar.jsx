@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import AddPost from "../posts/AddPost";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import AddBoxSharpIcon from "@mui/icons-material/AddBoxSharp";
 import HomeSharpIcon from "@mui/icons-material/HomeSharp";
 import SearchSharpIcon from "@mui/icons-material/SearchSharp";
 import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
@@ -42,12 +42,7 @@ export default function BottomNavbar() {
           value="explore"
           icon={<SearchSharpIcon />}
         />
-        <BottomNavigationAction
-          LinkComponent={Link}
-          to={"/create"}
-          value="create"
-          icon={<AddBoxSharpIcon />}
-        />
+        <AddPost />
         <BottomNavigationAction
           LinkComponent={Link}
           to={"/notifications"}

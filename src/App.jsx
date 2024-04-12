@@ -11,6 +11,7 @@ import Settings from "./pages/profile/Settings";
 import Profile from "./pages/profile/Profile";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
+import Post from "./pages/posts/Post";
 
 function App() {
   return (
@@ -71,6 +72,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/post/:id"
+            element={
+              <PrivateRoute>
+                <Post />
               </PrivateRoute>
             }
           />
