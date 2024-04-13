@@ -102,7 +102,7 @@ export default function Sidebar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  console.log(userData);
+  console.log(userData, currentUser);
   return (
     currentUser && (
       <Box sx={{ display: "flex" }}>

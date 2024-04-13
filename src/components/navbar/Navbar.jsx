@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import React from "react";
 import BottomNavbar from "./BottomNavbar";
 import Sidebar from "./Sidebar";
