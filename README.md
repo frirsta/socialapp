@@ -17,3 +17,4 @@
 - Favicon <a href="https://www.flaticon.com/free-icons/camera" title="camera icons">Camera icons created by Freepik - Flaticon</a>
 
 post default: <a href="https://www.flaticon.com/free-icons/digital-asset" title="digital asset icons">Digital asset icons created by afif fudin - Flaticon</a>
+

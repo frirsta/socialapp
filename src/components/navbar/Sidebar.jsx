@@ -11,7 +11,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import ExitToAppOutlined from "@mui/icons-material/ExitToAppOutlined";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -55,24 +54,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -107,25 +88,32 @@ export default function Sidebar() {
     currentUser && (
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open}>
-          <Toolbar>
+        <Toolbar sx={{ zIndex: 88, position: "fixed" }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{
+              marginRight: 5,
+              ...(open && { display: "none" }),
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+        <Drawer
+          sx={{ position: "relative", zIndex: "1" }}
+          variant="permanent"
+          open={open}
+        >
+          <DrawerHeader>
             <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
+              onClick={handleDrawerClose}
               sx={{
-                marginRight: 5,
-                ...(open && { display: "none" }),
+                ...(!open && { display: "none" }),
               }}
             >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
               {theme.direction === "rtl" ? (
                 <ChevronRightIcon />
               ) : (

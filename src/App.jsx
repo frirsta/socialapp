@@ -12,6 +12,7 @@ import Profile from "./pages/profile/Profile";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicOnlyRoute from "./routes/PublicOnlyRoute";
 import Post from "./pages/posts/Post";
+import Explore from "./pages/explore/Explore";
 
 function App() {
   return (
@@ -80,6 +81,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Post />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/explore"
+            element={
+              <PrivateRoute>
+                <Explore />
               </PrivateRoute>
             }
           />

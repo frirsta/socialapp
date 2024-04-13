@@ -23,7 +23,7 @@ import Box from "@mui/joy/Box";
 
 const AddPost = ({ openSidebar }) => {
   const isMobileScreen = useMediaQuery("(max-width:600px)");
-  const characterCount = formik.values.text.length;
+
   const {
     formik,
     handleUpload,
@@ -38,6 +38,8 @@ const AddPost = ({ openSidebar }) => {
     handleReturn,
     showExitConfirmation,
   } = useAddPost();
+
+  const characterCount = formik.values.text.length;
 
   return (
     <>

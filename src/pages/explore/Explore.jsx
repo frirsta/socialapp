@@ -1,9 +1,21 @@
-import React from 'react'
+import { Box } from "@mui/joy";
+import React from "react";
 
 const Explore = () => {
   return (
-    <div>Explore</div>
-  )
-}
+    <Box
+      sx={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      Explore
+    </Box>
+  );
+};
 
-export default Explore
+export default Explore;
