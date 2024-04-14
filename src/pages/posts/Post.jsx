@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import MoreHoriz from "@mui/icons-material/MoreHoriz";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import ModeCommentOutlined from "@mui/icons-material/ModeCommentOutlined";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
@@ -17,8 +16,19 @@ import Card from "@mui/joy/Card";
 import Link from "@mui/joy/Link";
 import Box from "@mui/joy/Box";
 import moment from "moment";
-
-const Post = ({ profilePicture, username, uid, image, text, timestamp }) => {
+import PostMenu from "../../components/posts/PostMenu";
+import { AuthContext } from "../../context/AuthContext";
+const Post = ({
+  profilePicture,
+  username,
+  uid,
+  image,
+  text,
+  timestamp,
+  documentId,
+  deletePost,
+}) => {
+  const { currentUser, userData } = useContext(AuthContext);
   const timeAgo = moment.unix(timestamp.seconds).fromNow();
   const [isExpanded, setIsExpanded] = useState(false);
   const toggleTextExpansion = () => {
@@ -69,14 +79,11 @@ const Post = ({ profilePicture, username, uid, image, text, timestamp }) => {
           </Box>
         </Link>
         <Typography fontWeight="lg">{username}</Typography>
-        <IconButton
-          variant="plain"
-          color="neutral"
-          size="sm"
-          sx={{ ml: "auto" }}
-        >
-          <MoreHoriz />
-        </IconButton>
+        <Box sx={{ ml: "auto" }}>
+          <PostMenu
+            handleDelete={() => deletePost(currentUser, uid, documentId)}
+          />
+        </Box>
       </CardContent>
       <CardOverflow>
         <AspectRatio>

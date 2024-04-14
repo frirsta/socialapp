@@ -3,6 +3,7 @@ import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import Alert from "@mui/joy/Alert";
 import Box from "@mui/joy/Box";
 import { Reducer, postActions, postState } from "../../context/Reducer";
+import { deletePost } from "../../actions/postFunctions/postActions";
 import { db } from "../../firebase/firebase";
 import Post from "./Post";
 
@@ -45,7 +46,7 @@ const Posts = () => {
       }
     };
     fetchPosts();
-  }, []);
+  }, [posts]);
 
   return (
     <Box
@@ -74,6 +75,7 @@ const Posts = () => {
               email={item?.email}
               text={item?.text}
               timestamp={item?.timestamp}
+              deletePost={deletePost}
             />
           );
         })
