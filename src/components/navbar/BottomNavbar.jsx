@@ -1,19 +1,21 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import BottomNavigationAction from "@mui/material/BottomNavigationAction";
+import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
+import SearchSharpIcon from "@mui/icons-material/SearchSharp";
+import BottomNavigation from "@mui/material/BottomNavigation";
+import HomeSharpIcon from "@mui/icons-material/HomeSharp";
+import Avatar from "@mui/material/Avatar";
 import { AuthContext } from "../../context/AuthContext";
 import AddPost from "../posts/AddPost";
-import BottomNavigation from "@mui/material/BottomNavigation";
-import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import HomeSharpIcon from "@mui/icons-material/HomeSharp";
-import SearchSharpIcon from "@mui/icons-material/SearchSharp";
-import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
-import Avatar from "@mui/material/Avatar";
 
 export default function BottomNavbar() {
   const { currentUser, userData } = useContext(AuthContext);
-  const [value, setValue] = useState("recents");
+  const [value, setValue] = useState("home");
+
   console.log(currentUser, userData);
-  const handleChange = (event, newValue) => {
+
+  const handleChange = (newValue) => {
     setValue(newValue);
   };
 
@@ -26,6 +28,7 @@ export default function BottomNavbar() {
           left: 0,
           right: 0,
           maxWidth: "100vw",
+          zIndex: 1000,
         }}
         value={value}
         onChange={handleChange}

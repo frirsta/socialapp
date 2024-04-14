@@ -1,41 +1,41 @@
 import React from "react";
-import { useAddPost } from "../../actions/postFunctions/useAddPost.jsx";
-import postDefault from "../../assets/icons/postDefault.png";
-import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import ListItemButton from "@mui/material/ListItemButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import DialogContent from "@mui/joy/DialogContent";
+import Avatar from "@mui/joy/Avatar";
+import Typography from "@mui/joy/Typography";
+import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import DialogTitle from "@mui/joy/DialogTitle";
-import ListItem from "@mui/material/ListItem";
-import Typography from "@mui/joy/Typography";
+import DialogContent from "@mui/joy/DialogContent";
 import Textarea from "@mui/joy/Textarea";
-import Divider from "@mui/joy/Divider";
 import Button from "@mui/joy/Button";
-import Avatar from "@mui/joy/Avatar";
-import Alert from "@mui/joy/Alert";
-import Modal from "@mui/joy/Modal";
+import Divider from "@mui/joy/Divider";
 import Box from "@mui/joy/Box";
+import Alert from "@mui/joy/Alert";
+import { useAddPost } from "../../actions/postFunctions/useAddPost.jsx";
+import postDefault from "../../assets/icons/postDefault.png";
 
 const AddPost = ({ openSidebar }) => {
-  const isMobileScreen = useMediaQuery("(max-width:600px)");
+  const isMobileScreen = useMediaQuery("(max-width:767px)");
 
   const {
-    formik,
     handleUpload,
     handleSubmitPost,
+    handleCloseModal,
+    handleOpenModal,
+    handleExit,
+    handleReturn,
+    formik,
     text,
     file,
     image,
-    handleCloseModal,
-    handleOpenModal,
     openModal,
-    handleExit,
-    handleReturn,
     showExitConfirmation,
   } = useAddPost();
 

@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
-import { AuthContext } from "../../context/AuthContext";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -9,18 +8,19 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ExitToAppOutlined from "@mui/icons-material/ExitToAppOutlined";
+import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
+import { AuthContext } from "../../context/AuthContext";
 import AddPost from "../posts/AddPost";
 
 const drawerWidth = 240;
@@ -103,7 +103,7 @@ export default function Sidebar() {
           </IconButton>
         </Toolbar>
         <Drawer
-          sx={{ position: "relative", zIndex: "1" }}
+          sx={{ position: "relative", zIndex: "3" }}
           variant="permanent"
           open={open}
         >

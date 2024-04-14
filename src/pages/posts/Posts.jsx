@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import Alert from "@mui/joy/Alert";
+import Box from "@mui/joy/Box";
 import { Reducer, postActions, postState } from "../../context/Reducer";
 import { db } from "../../firebase/firebase";
 import Post from "./Post";
@@ -47,7 +48,15 @@ const Posts = () => {
   }, []);
 
   return (
-    <>
+    <Box
+      sx={{
+        paddingTop: "64px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "flex-start",
+      }}
+    >
       {state?.error ? (
         <Alert color="danger">
           Something went wrong refresh and try again...
@@ -69,7 +78,7 @@ const Posts = () => {
           );
         })
       )}
-    </>
+    </Box>
   );
 };
 
