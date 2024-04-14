@@ -1,8 +1,7 @@
 import React, { useContext, useState } from "react";
-import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 import { useFormik } from "formik";
-import { AuthContext } from "../../context/AuthContext";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,6 +11,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/material/Alert";
+import { AuthContext } from "../../context/AuthContext";
 
 const ResetPassword = () => {
   const [loading, setLoading] = useState(false);

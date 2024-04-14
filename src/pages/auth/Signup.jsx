@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import * as Yup from "yup";
-import { AuthContext } from "../../context/AuthContext";
-import { onAuthStateChanged, auth } from "../../firebase/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import FormControl from "@mui/material/FormControl";
@@ -11,13 +9,15 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
+import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import google from "../../assets/icons/google.png";
 import Alert from "@mui/material/Alert";
+import { AuthContext } from "../../context/AuthContext";
+import { onAuthStateChanged, auth } from "../../firebase/firebase";
+import google from "../../assets/icons/google.png";
 
 const Signup = () => {
   const [errors, setErrors] = useState(null);

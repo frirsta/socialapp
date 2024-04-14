@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
-import * as Yup from "yup";
 import { useFormik } from "formik";
-import { AuthContext } from "../../context/AuthContext";
+import * as Yup from "yup";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
@@ -12,6 +11,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import { AuthContext } from "../../context/AuthContext";
 
 const ChangePassword = () => {
   const [error, setError] = useState("");
