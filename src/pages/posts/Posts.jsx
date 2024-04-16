@@ -10,7 +10,7 @@ import Post from "./Post";
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [state, dispatch] = useReducer(Reducer, postState);
-  const { HANDLE_ERROR } = postActions;
+  const { HANDLE_ERROR, SUBMIT_POST } = postActions;
 
   const getPosts = async () => {
     try {
@@ -46,7 +46,7 @@ const Posts = () => {
       }
     };
     fetchPosts();
-  }, [posts]);
+  }, []);
 
   return (
     <Box

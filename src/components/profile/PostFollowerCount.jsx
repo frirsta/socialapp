@@ -10,10 +10,9 @@ const PostFollowerCount = () => {
   return isMobileScreen ? (
     <Sheet
       sx={{
-        bgcolor: "background.level1",
-        borderRadius: "sm",
+        borderRadius: "0px",
         p: 1.5,
-        my: 5,
+        my: 0,
         display: "flex",
         justifyContent: "space-between",
         textAlign: "center",

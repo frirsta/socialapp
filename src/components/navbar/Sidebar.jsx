@@ -1,14 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { styled, useTheme } from "@mui/material/styles";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { styled } from "@mui/material/styles";
+import FilterVintageOutlinedIcon from "@mui/icons-material/FilterVintageOutlined";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import ExitToAppOutlined from "@mui/icons-material/ExitToAppOutlined";
-import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
@@ -20,8 +17,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Avatar from "@mui/material/Avatar";
-import { AuthContext } from "../../context/AuthContext";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import AddPost from "../posts/AddPost";
+import Typography from "@mui/material/Typography";
+import { AuthContext } from "../../context/AuthContext";
 
 const drawerWidth = 240;
 
@@ -49,8 +48,9 @@ const closedMixin = (theme) => ({
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
+  mr: open ? 3 : "auto",
+  minHeight: 48,
+  px: 2.5,
   ...theme.mixins.toolbar,
 }));
 
@@ -72,54 +72,47 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function Sidebar() {
-  const theme = useTheme();
+  const isTabletScreen = useMediaQuery("(min-width: 767px)");
+  const isDesktopScreen = useMediaQuery("(min-width: 1200px)");
   const [open, setOpen] = useState(false);
   const { signOutUser, userData, currentUser } = useContext(AuthContext);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    if (isDesktopScreen) {
+      setOpen(true);
+    } else if (isTabletScreen) {
+      setOpen(false);
+    } else {
+      setOpen(false);
+    }
+  }, [open, isTabletScreen, isDesktopScreen]);
   console.log(userData, currentUser);
   return (
     currentUser && (
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <Toolbar sx={{ zIndex: 88, position: "fixed" }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
+        <Toolbar sx={{ zIndex: 88, position: "fixed" }}></Toolbar>
         <Drawer
           sx={{ position: "relative", zIndex: "3" }}
           variant="permanent"
           open={open}
         >
-          <DrawerHeader>
-            <IconButton
-              onClick={handleDrawerClose}
-              sx={{
-                ...(!open && { display: "none" }),
-              }}
-            >
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
+          <DrawerHeader sx={{ padding: "8px 20px", margin: "10px 0" }}>
+            {open ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                }}
+              >
+                <FilterVintageOutlinedIcon sx={{ marginRight: "24px" }} />
+
+                <Typography fontWeight={"bold"}>FrirstaGram</Typography>
+              </Box>
+            ) : (
+              <FilterVintageOutlinedIcon />
+            )}
           </DrawerHeader>
           <Divider />
           <Box
@@ -150,7 +143,10 @@ export default function Sidebar() {
                   >
                     <HomeRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText
+                    primary="Home"
+                    sx={{ opacity: open ? 1 : 0, color: "#000" }}
+                  />
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding sx={{ display: "block" }}>
@@ -174,7 +170,7 @@ export default function Sidebar() {
                   </ListItemIcon>
                   <ListItemText
                     primary="Notifications"
-                    sx={{ opacity: open ? 1 : 0 }}
+                    sx={{ opacity: open ? 1 : 0, color: "#000" }}
                   />
                 </ListItemButton>
               </ListItem>
@@ -200,7 +196,7 @@ export default function Sidebar() {
                   </ListItemIcon>
                   <ListItemText
                     primary="Explore"
-                    sx={{ opacity: open ? 1 : 0 }}
+                    sx={{ opacity: open ? 1 : 0, color: "#000" }}
                   />
                 </ListItemButton>
               </ListItem>
@@ -228,7 +224,7 @@ export default function Sidebar() {
                   </ListItemIcon>
                   <ListItemText
                     primary="Profile"
-                    sx={{ opacity: open ? 1 : 0 }}
+                    sx={{ opacity: open ? 1 : 0, color: "#000" }}
                   />
                 </ListItemButton>
               </ListItem>
